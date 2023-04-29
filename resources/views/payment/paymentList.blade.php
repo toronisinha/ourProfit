@@ -1,0 +1,58 @@
+
+@extends('layouts.app')
+
+@section('mainpart')
+    <div class="card my-4 px-0 container">
+        @if(session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+        <div class="card-header d-flex justify-content-between">
+            <h3 class="position-relative"> Payment List</h3>
+            <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('createPayment') }}>Add Payment</a></button>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-center">
+                        <th>SL</th>
+                        <th>Name</th>
+                        <th>Total Amount</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>                      
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($paymentList as $key => $payment)
+
+                        <tr class="text-center">
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $payment->name }}</td>
+                            <td>{{ $payment->payment_amount }}</td>
+                            <td>{{ $payment->payment_date }}</td>
+                            <td>
+                                @if ($payment->status == 1)
+                                    <span class="badge bg-success">Paid</span>
+                                @elseif($payment->profit == 0 && $payment->total != 0)
+                                    <span class="badge bg-info">profit paid</span>
+                                @else  
+                                   <span class="badge bg-warning">Unpaid</span> 
+                                @endif    
+                            </td>
+                            <td class="d-flex ">
+                                <a href={{ route( 'paymentUpdate', [$payment->id] ) }} class="btn btn-primary btn-sm">Edit</a>
+                                <a href={{ route( 'paymentDelete', [$payment->id] ) }} class="btn btn-danger btn-sm ">Delete</a>
+                                
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+@endsection
