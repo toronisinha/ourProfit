@@ -29,14 +29,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    Route::resources(['customer'=>CustomerController::class]);
+    Route::get('customer/{customer}/delete', [CustomerController::class, 'destroy'])->name('customer.destroy');
+
 });
+
 // for used customer
-Route::get('/Customer/List', [customerController::class, 'index'])->name('customerList');
-Route::get('/addCustomer', [customerController::class, 'create'])->name('customerAdd');
-Route::get('/Customer/edit/{id}', [customerController::class, 'edit'])->name('editCustomer');
-Route::post('/Customer/update/{id}', [customerController::class, 'update'])->name('customer.update');
-Route::get('/Customer/delete/{id}', [customerController::class, 'delete'])->name('deleteCustomer');
-Route::post('/customer/store', [customerController::class, 'store'])->name('customer.store');
+//Route::get('/Customer/List', [customerController::class, 'index'])->name('customerList');
+//Route::get('/addCustomer', [customerController::class, 'create'])->name('customerAdd');
+//Route::get('/Customer/edit/{id}', [customerController::class, 'edit'])->name('editCustomer');
+//Route::post('/Customer/update/{id}', [customerController::class, 'update'])->name('customer.update');
+//Route::get('/Customer/delete/{id}', [customerController::class, 'delete'])->name('deleteCustomer');
+//Route::post('/customer/store', [customerController::class, 'store'])->name('customer.store');
 
 //for used loans
 Route::get('/Loan/Add', [LoanController::class, 'create'])->name('createLoan');

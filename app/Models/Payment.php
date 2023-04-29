@@ -12,9 +12,6 @@ class Payment extends Model
         'customer_id',
         'loan_id',
         'payment_date',
-        'payment_amount',
-        'total_amount',
-        'due_amount',
-        'status'
+        'payment_amount'
     ];
 }

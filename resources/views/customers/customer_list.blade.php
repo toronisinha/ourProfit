@@ -2,14 +2,10 @@
 
 @section('mainpart')
     <div class="card my-4 px-0 container">
-        @if(session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
+
         <div class="card-header d-flex justify-content-between">
             <h3 class="position-relative">Customer List</h3>
-            <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('customerAdd') }}>Add Customer</a></button>
+            <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('customer.create') }}>Add Customer</a></button>
         </div>
         <div class="card-body table-responsive">
             <table class="table table-striped">
@@ -35,8 +31,8 @@
                             <td>{{ $customer->image }}</td>
                             
                             <td>
-                                <a href={{ route('editCustomer', [$customer->id]) }} class="btn btn-primary btn-sm">Edit</a>
-                                <a href={{ route('deleteCustomer', [$customer->id]) }} class="btn btn-danger btn-sm">Delete</a>
+                                <a href={{ route('customer.edit', [$customer->id]) }} class="btn btn-primary btn-sm">Edit</a>
+                                <a href={{ route('customer.destroy', [$customer->id]) }} class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                     @endforeach

@@ -11,13 +11,17 @@ class LoanController extends Controller
 {
     public function index(){
 
-        $data = DB::table('loans')
-            ->join('customers', 'customers.id', '=', 'loans.name')
-            ->select('loans.*', 'customers.*')
-            ->get();
-        // $allLoanList = Loan::all();
-        // return view('loans.loanList',compact('allLoanList'));
-        return view('loans.loanList', ['allLoanList' => $data]);
+//        $data = DB::table('loans')
+//            ->join('customers', 'customers.id', '=', 'loans.name')
+//            ->select('loans.*', 'customers.*')
+//            ->get();
+//        // $allLoanList = Loan::all();
+//        // return view('loans.loanList',compact('allLoanList'));
+//        return view('loans.loanList', ['allLoanList' => $data]);
+
+
+        $data['loans'] = Loan::with('customer')->all();
+        return view('loans.loanList', $data);
     }
 
     public function create(){

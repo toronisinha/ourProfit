@@ -10,17 +10,16 @@ class Loan extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'customer_id',
         'amount',
-        'parcentage',
-        'total',
+        'percentage',
+        'day_profit',
+        'total_profit',
+        'paid_amount',
         'date_from',
         'date_to',
-        'phone_numbar',
-        'email',
-        'month',
-        'time',
-        'profit'
+        'timeframe',
+        'status', // 1=>active, 2=>done
     ];
 
     const TIME_FRAMES = [
@@ -29,9 +28,9 @@ class Loan extends Model
         30 => 'Monthly',
     ];
 
-    public function Customer(): BelongsToMany
+    public function customer()
     {
-        return $this->belongsToMany(Customer::class);
+        return $this->belongsTo(Customer::class);
     }
 
     

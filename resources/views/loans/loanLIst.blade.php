@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($allLoanList as $key => $loanList)
+                    @foreach ($loans as $key => $loanList)
                       @php 
                       $perDay = $loanList->profit/$loanList->time;
 
@@ -40,7 +40,7 @@
                       @endphp
                         <tr class="text-center">
                             <td>{{ ++$key }}</td>
-                            <td>{{ $loanList->name }}</td>
+                            <td>{{ $loanList->customer->name }}</td>
                             <td>{{ $loanList->amount }}</td>
                             <td>{{ $loanList->parcentage }}%</td>
                             <td>{{ $loanList->profit }}</td>
