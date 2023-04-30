@@ -1,106 +1,66 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\LoanValidation;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Loan;
 
 class LoanController extends Controller
 {
     public function index(){
-
-//        $data = DB::table('loans')
-//            ->join('customers', 'customers.id', '=', 'loans.name')
-//            ->select('loans.*', 'customers.*')
-//            ->get();
-//        // $allLoanList = Loan::all();
-//        // return view('loans.loanList',compact('allLoanList'));
-//        return view('loans.loanList', ['allLoanList' => $data]);
-
-
-        $data['loans'] = Loan::with('customer')->all();
+        
+        $data['loans'] = Loan::with('customer')->get();
         return view('loans.loanList', $data);
     }
 
     public function create(){
-        return view('loans.create_loan', [
-            'customers' => Customer::all()
-        ]);
-    }
-
-    public function store(Request $request){
-        $data = $request->input();
-        $loan = new Loan;
-            $loan->name = $data['name'];
-            $loan->amount = $data['amount'];
-            $loan->parcentage = $data['parcentage'];
-            $loan->profit = ($data['amount'] * $data['parcentage']) / 100;
-            $loan->total = $loan->profit + $data['amount'];
-            $loan->date_from = $data['date_from'];
-            $loan->time = $data['time'];
         
-            $loan->save();
+        $data['title'] = "Add new Loan";
+        $data['customers']= Customer::all();
+        return view('loans.create_update', $data );
+    }
+
+    public function store(LoanValidation $request){
+        try {
+
+            $validatedData = $request->validated();
+            $validatedData['timeframe']= $request['timeframe'];
+            $validatedData['day_profit'] = ($validatedData['amount'] * $validatedData['percentage']) / 3000;
+
+            Loan::create($validatedData);
+
+            return redirect()->route('loan.index')->with('success', 'Customer has been added successfully!');
+
+        } catch ( \Exception $e ) {
+            return redirect()->route('loan.index')->with('error', $e->getMessage());
+        }
+       
+    }
+
+    public function edit(Loan $loan, Request $request){
       
-            return redirect()->route('loanList');
+        $data['title'] = "Update Loan";
+        $data['item'] = $loan;
+        $data['customers'] = Customer::all();
+
+        return view('loans.create_update', $data);
     }
 
+    public function update(Loan $loan, LoanValidation $request){
 
-    public function edit($id){
-        $data = DB::table('loans')
-            ->join('customers', 'customers.id', '=', 'loans.name')
-            ->select('loans.amount', 'customers.name', 'loans.parcentage', 'loans.time',
-            'loans.profit', 'loans.total', 'loans.date_to', 'loans.id')
-            ->where('loans.name',"=","$id")
-            ->get();   
-        return view('loans.editloan', [
-            'data' => $data
-        ]);
-        //   $data = Loan::find($id);
-        // return view('loans.editloan', compact('data'));
+        $validatedData = $request->validated();
+        $validatedData['day_profit'] = ($validatedData['amount'] * $validatedData['percentage']) / 3000;
+
+        $loan->update($validatedData);
+		return redirect()->route('loan.index')->with('success', 'loan has been updated successfully');
+        
     }
 
-    public function update(Request $request, $id){
-
-        $olddata = Loan::find($id);
-        $data = $request->input();
-
-        // $profit = $olddata->profit;
-        // $total = $olddata->total;
-        // $status = 0;
-       
-        // if( $olddata->profit == $data['paid'] ){
-        //     $profit = 0;
-        //     $total =($total - $data['paid']);
-        // }
-
-        // if( $olddata->total == $data['paid'] ){
-        //     $profit = 0;
-        //     $total = 0;
-        // }
-        // if($total == 0 && $profit == 0){
-        //     $status = 1;
-        // }
-        $profit= ($data['amount'] * $data['parcentage']) / 100;
-        $updateData = [
-            'amount' => $data['amount'],
-            'parcentage' => $data['parcentage'],
-            'profit' => $profit,
-            'total' =>$profit+ $data['amount'],
-            'time' => $data['time']
-                
-        ];
-     
-        Loan::whereId($id)->update($updateData);
-       
-                
-		return redirect()->route('loanList');
-    }
-
-    public function delete($id){
-
-        Loan::whereId($id)->delete();
-        return redirect()->route('loanList');
+    public function destroy(Loan $loan){
+        if ( $loan->delete() )
+            return redirect()->route('loan.index')->with('success', 'Loan Deleted sucessfully');
+        else
+            return redirect()->route('loan.index')->with('error', 'Something wentddd wrong!');
     }
 }

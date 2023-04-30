@@ -26,7 +26,7 @@
                             <td>{{ ++$key }}</td>
                             <td>{{ $customer->name }}</td>
                             <td>{{ $customer->email }}</td>
-                            <td>{{ $customer->phone_numbar }}</td>
+                            <td>{{ $customer->phone }}</td>
                             <td>{{ $customer->address }}</td>
                             <td>{{ $customer->image }}</td>
                             

@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('customer_id')->nullable();
-            $table->string('loan_id')->nullable();
+            $table->integer('customer_id')->nullable();
+            $table->integer('loan_id')->nullable();
             $table->timestamp('payment_date')->nullable();
             $table->string('payment_amount')->nullable();
-            $table->string('total_amount')->nullable();
-            $table->string('due_amount')->nullable();  
-            $table->tinyInteger('status')->defult(0);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

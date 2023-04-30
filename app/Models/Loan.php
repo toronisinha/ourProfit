@@ -17,7 +17,6 @@ class Loan extends Model
         'total_profit',
         'paid_amount',
         'date_from',
-        'date_to',
         'timeframe',
         'status', // 1=>active, 2=>done
     ];
@@ -30,7 +29,7 @@ class Loan extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     

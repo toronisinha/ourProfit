@@ -13,18 +13,15 @@ return new class extends Migration
     {
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('customer_id')->nullable();
             $table->string('amount')->nullable();
-            $table->string('parcentage')->nullable();
-            $table->timestamp('date_from')->nullable();
-            $table->timestamp('date_to')->nullable();
-            $table->string('phone_numbar')->nullable();
-            $table->string('email')->nullable();
-            $table->string('month')->nullable();
-            $table->string('time')->nullable();
-            $table->string('profit')->nullable();
-            $table->string('total')->nullable();
-            $table->tinyInteger('status')->defult(0);
+            $table->string('percentage')->nullable();
+            $table->decimal('day_profit', 6, 2)->nullable();
+            $table->decimal('total_profit', 6, 2)->nullable();
+            $table->string('paid_amount')->nullable();
+            $table->string('date_from');
+            $table->string('timeframe')->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

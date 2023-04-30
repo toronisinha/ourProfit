@@ -8,13 +8,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href={{ route('loanList') }}>
+                <a class="nav-link" aria-current="page" href={{ route('loan.index') }}>
                     <span data-feather="home"></span>
                     Loan List
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href={{ route('paymentList') }}>
+                <a class="nav-link" aria-current="page" href={{ route('payment.index') }}>
                     <span data-feather="home"></span>
                    payments
                 </a>

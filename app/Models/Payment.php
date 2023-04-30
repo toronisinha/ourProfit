@@ -14,4 +14,10 @@ class Payment extends Model
         'payment_date',
         'payment_amount'
     ];
+
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class , 'customer_id');
+    }
+    
 }

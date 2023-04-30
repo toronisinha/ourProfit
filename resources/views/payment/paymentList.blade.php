@@ -10,7 +10,7 @@
         @endif
         <div class="card-header d-flex justify-content-between">
             <h3 class="position-relative"> Payment List</h3>
-            <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('createPayment') }}>Add Payment</a></button>
+            <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('payment.create') }}>Add Payment</a></button>
         </div>
 
         <div class="card-body table-responsive">
@@ -30,9 +30,9 @@
 
                         <tr class="text-center">
                             <td>{{ ++$key }}</td>
-                            <td>{{ $payment->name }}</td>
+                            <td>{{ $payment->customer->name }}</td>
                             <td>{{ $payment->payment_amount }}</td>
-                            <td>{{ $payment->payment_date }}</td>
+                            <td>{{ date('d-M-y', strtotime($payment->payment_date)) }}</td>
                             <td>
                                 @if ($payment->status == 1)
                                     <span class="badge bg-success">Paid</span>
@@ -43,8 +43,8 @@
                                 @endif    
                             </td>
                             <td class="d-flex ">
-                                <a href={{ route( 'paymentUpdate', [$payment->id] ) }} class="btn btn-primary btn-sm">Edit</a>
-                                <a href={{ route( 'paymentDelete', [$payment->id] ) }} class="btn btn-danger btn-sm ">Delete</a>
+                                <a href={{ route( 'payment.edit', [$payment->id] ) }} class="btn btn-primary btn-sm">Edit</a>
+                                <a href={{ route( 'payment.destroy', [$payment->id] ) }} class="btn btn-danger btn-sm ">Delete</a>
                                 
                             </td>
                         </tr>
