@@ -16,46 +16,48 @@
                         <th>SL</th>
                         <th>Name</th>
                         <th>Amount</th>
-                        <th>Parcentage</th>
-                        <th>Par day Profit</th>
-                        <th>Total days</th>
-                        <th>Loan date</th>
-                        <th>Total Profit</th>
-                        <th>Status</th>                    
+                        <th title="Percentage">%</th>
+                        <th title="Per Day Profit">PD Profit</th>
+                        <th title="Package Total Profit">Pac T. Profit</th>
+                        <th title="Total Days">T days</th>
+                        <th>LoanDate</th>
+                        <th>Grand T Profit</th>
+                        <th>Grand T Paid</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($loans as $key => $loanList)
+                    @foreach ($loans as $key => $loan)
                     
                       @php 
                      
-                      $created = new \Carbon\Carbon($loanList->date_from);
+                      $created = new \Carbon\Carbon($loan->date_from);
                       $now = \Carbon\Carbon::now();
                       $daysInterval = $created->diff($now)->days;
                       @endphp
                         <tr class="text-center">
                             <td>{{ ++$key }}</td>
-                            <td>{{ $loanList->customer->name }}</td>
-                            <td>{{ $loanList->amount }}</td>
-                            <td>{{ $loanList->percentage }}%</td>
-                            <td>{{ $loanList->day_profit }}</td>
+                            <td>{{ $loan->customer->name }}</td>
+                            <td>{{ $loan->amount }}</td>
+                            <td>{{ $loan->percentage }}%</td>
+                            <td>{{ $loan->day_profit }}</td>
+                            <td>{{ $loan->total_profit }}</td>
                             <td>{{ $daysInterval }} days</td>
-                            <td>{{ date('d-M-y', strtotime($created)) }}</td>
-                            <td>{{ $daysInterval>0 ? $loanList->day_profit * $daysInterval : 0 }}</td>
+                            <td>{{ $created->format('d-M-Y') }}</td>
+                            <td>{{ $daysInterval>0 ? $loan->day_profit * $daysInterval : 0 }}</td>
+                            <td>{{ $loan->paid_amount>0 ? $loan->paid_amount : 0 }}</td>
                             <td>
-                                @if ($loanList->status == 1)
-                                    <span class="badge bg-success">Paid</span>
-                                @elseif($loanList->profit == 0 && $loanList->total != 0)
-                                    <span class="badge bg-info">profit paid</span>
-                                @else  
-                                   <span class="badge bg-warning">Unpaid</span> 
+                                @if ($loan->status == 1)
+                                    <span class="badge bg-primary">Active</span>
+                                @elseif ($loan->status==2)
+                                   <span class="badge bg-success">Complete</span>
                                 @endif    
                             </td>
                             <td class="d-flex ">
-                                <a href={{ route( 'loan.edit', [$loanList->id] ) }} class="btn btn-primary btn-sm">Edit</a>
-                                <a href={{ route( 'loan.destroy', [$loanList->id] ) }} class="btn btn-danger btn-sm ">Delete</a>
-                                <a href="" id={{ $loanList->id }} data-toggle="modal" data-target="#exampleModalLong" class="btn btn-info btn-sm">Details</a>
+                                <a href={{ route( 'loan.edit', [$loan->id] ) }} class="btn btn-primary btn-sm">Edit</a>
+                                <a onclick="return confirm('Are you sure to delete?')" href={{ route( 'loan.destroy', [$loan->id] ) }} class="btn btn-danger btn-sm ">Delete</a>
+                                {{--<a href="" id={{ $loan->id }} data-toggle="modal" data-target="#exampleModalLong" class="btn btn-info btn-sm">Details</a>--}}
                             </td>
                         </tr>
                     @endforeach

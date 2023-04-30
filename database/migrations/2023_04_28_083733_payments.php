@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->integer('customer_id')->nullable();
-            $table->integer('loan_id')->nullable();
+            $table->unsignedInteger('customer_id');
+            $table->unsignedInteger('loan_id');
             $table->timestamp('payment_date')->nullable();
-            $table->string('payment_amount')->nullable();
-            $table->tinyInteger('status')->default(0);
+            $table->decimal('payment_amount', 10, 2)->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('payments');
     }
 };

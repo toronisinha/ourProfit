@@ -10,6 +10,22 @@
 
         <div class="card-body">
 
+            @if ( empty($item) )
+            <form action={{ route('payment.create') }} method="get" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <select class="form-control" name="customer_id" onchange="submit()">
+                        <option value="" disabled selected>Select Customer</option>
+                        @foreach($customers as $customer)
+                            <option @selected($selectedCustomerId==$customer->id) value="{{ $customer->id }}">{{ $customer->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
+            @endif
+
+
+
             @if ( !empty($item) )
             <form action={{ route('payment.update', [$item->id]) }} method="post" enctype="multipart/form-data">
                 @method('PUT')
@@ -20,29 +36,33 @@
                     </select>
                 </div>
             @else
-            <form action={{ route('payment.store') }} method="post" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <select class="form-control" name="customer_id">
-                        <option value="" disabled selected>Select Customer</option>
-                        @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}">{{ $customer->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <form action={{ route('payment.store') }} method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="customer_id" value="{{ $selectedCustomerId }}">
             @endif
+
 
                 @csrf
 
+
+
+                <div class="mb-3">
+                    <label class="form-label">Select Loan</label>
+                    <select class="form-control" name="loan_id">
+                        <option value="" disabled selected>Select Loan</option>
+                        @foreach($loans as $loan)
+                            <option @selected($selectedLoanId==$loan->id) value="{{ $loan->id }}">{{ $loan->id}} | {{ $loan->amount }} | {{ \Carbon\Carbon::parse($loan->date_from)->format('d/m/Y') }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 
                 <div class="mb-3">
                     <label class="form-label">Amount: </label>
-                    <input class="form-control" type="nambar"  value="{{ !empty($item) ? $item->payment_amount : old('payment_amount') }}" name="payment_amount">
+                    <input class="form-control" type="number"  value="{{ !empty($item) ? $item->payment_amount : old('payment_amount') }}" name="payment_amount">
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label">Payment Date:</label>
-                    <input class="form-control"  value="{{ !empty($item) ? $item->payment_date : old('payment_date') }}" type="date" name="payment_date">
+                    <input class="form-control"  value="{{ !empty($item) ? \Carbon\Carbon::parse($item->payment_date)->format('Y-m-y') : old('payment_date') }}" type="date" name="payment_date">
                 </div>
             
 

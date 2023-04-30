@@ -25,9 +25,8 @@ class LoanController extends Controller
         try {
 
             $validatedData = $request->validated();
-            $validatedData['timeframe']= $request['timeframe'];
             $validatedData['day_profit'] = ($validatedData['amount'] * $validatedData['percentage']) / 3000;
-
+            $validatedData['total_profit'] = $validatedData['day_profit'] * $validatedData['timeframe'];
             Loan::create($validatedData);
 
             return redirect()->route('loan.index')->with('success', 'Customer has been added successfully!');
@@ -51,6 +50,7 @@ class LoanController extends Controller
 
         $validatedData = $request->validated();
         $validatedData['day_profit'] = ($validatedData['amount'] * $validatedData['percentage']) / 3000;
+        $validatedData['total_profit'] = $validatedData['day_profit'] * $validatedData['timeframe'];
 
         $loan->update($validatedData);
 		return redirect()->route('loan.index')->with('success', 'loan has been updated successfully');

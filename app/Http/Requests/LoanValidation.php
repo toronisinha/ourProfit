@@ -26,6 +26,7 @@ class LoanValidation extends FormRequest
             'amount' => 'required',
             'percentage' => 'required',
             'date_from' => 'required',
+            'timeframe' => 'required',
         ];
     }
    

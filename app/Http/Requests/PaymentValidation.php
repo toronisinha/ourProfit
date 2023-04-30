@@ -22,7 +22,8 @@ class PaymentValidation extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => 'required|max:100',
+            'customer_id' => 'required',
+            'loan_id' => 'required',
             'payment_amount' => 'required',
             'payment_date' => 'required',
         ];

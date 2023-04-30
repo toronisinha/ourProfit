@@ -36,7 +36,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Amount </label>
-                    <input class="form-control" type="nambar"  value="{{ !empty($item) ? $item->amount : old('amount') }}" name="amount">
+                    <input class="form-control" type="number"  value="{{ !empty($item) ? $item->amount : old('amount') }}" name="amount">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Parcentage %</label>
@@ -45,15 +45,15 @@
                 <div class="mb-3">
                     <label class="form-label">Time Frame</label>
                     <select name="timeframe" id="" class="form-control">
-                        <option value="7">7 Days</option>
-                        <option value="15">15 Days</option>
-                        <option value="30">Monthly</option>
+                        <option @selected( !empty($item) && $item->timeframe==7 ) value="7">7 Days</option>
+                        <option @selected( !empty($item) && $item->timeframe==15 ) value="15">15 Days</option>
+                        <option @selected( !empty($item) && $item->timeframe==30 ) value="30">Monthly</option>
                     </select>
                 </div>
                
                 <div class="mb-3">
-                    <label class="form-label">Date</label>
-                    <input class="form-control"  value="{{ !empty($item) ? $item->date_from : old('date_from') }}" type="date" name="date_from">
+                    <label class="form-label">Load Taking Date</label>
+                    <input class="form-control"  value="{{ !empty($item) ? \Carbon\Carbon::parse($item->date_from)->format('Y-m-y') : old('date_from') }}" type="date" name="date_from">
                 </div>
             
 
