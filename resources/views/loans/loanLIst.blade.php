@@ -6,6 +6,10 @@
 
         <div class="card-header d-flex justify-content-between">
             <h3 class="position-relative">All Loan List</h3>
+            <form action={{ route('loan.index') }} method="get">
+                <input type="text" name="amount" placeholder="Search Amount">
+                <input type="submit"  value="Search">
+            </form>
             <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('loan.create') }}>Add Loan</a></button>
         </div>
 
@@ -23,18 +27,25 @@
                         <th>LoanDate</th>
                         <th>Grand T Profit</th>
                         <th>Grand T Paid</th>
+                        <th>Total Due</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $total_due_sum = 0 ;
+                    @endphp
                     @foreach ($loans as $key => $loan)
-                    
+                   
                       @php 
                      
                       $created = new \Carbon\Carbon($loan->date_from);
                       $now = \Carbon\Carbon::now();
                       $daysInterval = $created->diff($now)->days;
+                    //   $total_due = ( ($loan->day_profit * $daysInterval) + $loan->amount ) - $loan->paid_amount;
+                      $total_due = ( $loan->total_profit + $loan->amount ) - $loan->paid_amount;
+                      $total_due_sum = $total_due_sum + $total_due;
                       @endphp
                         <tr class="text-center">
                             <td>{{ ++$key }}</td>
@@ -45,8 +56,15 @@
                             <td>{{ $loan->total_profit }}</td>
                             <td>{{ $daysInterval }} days</td>
                             <td>{{ $created->format('d-M-Y') }}</td>
-                            <td>{{ $daysInterval>0 ? $loan->day_profit * $daysInterval : 0 }}</td>
+                            <td>
+                                @if ($loan->status==2)
+                                 <span class="badge bg-info">Close</span>
+                                @else
+                                {{ $daysInterval>0 ? $loan->day_profit * $daysInterval : 0 }}
+                                @endif
+                            </td>
                             <td>{{ $loan->paid_amount>0 ? $loan->paid_amount : 0 }}</td>
+                            <td>{{ $total_due }}</td>
                             <td>
                                 @if ($loan->status == 1)
                                     <span class="badge bg-primary">Active</span>
@@ -57,37 +75,30 @@
                             <td class="d-flex ">
                                 <a href={{ route( 'loan.edit', [$loan->id] ) }} class="btn btn-primary btn-sm">Edit</a>
                                 <a onclick="return confirm('Are you sure to delete?')" href={{ route( 'loan.destroy', [$loan->id] ) }} class="btn btn-danger btn-sm ">Delete</a>
-                                {{--<a href="" id={{ $loan->id }} data-toggle="modal" data-target="#exampleModalLong" class="btn btn-info btn-sm">Details</a>--}}
+                                {{-- <a data-id="{{ $loan->id }}" class="btn btn-info btn-sm modalUpdatePickupBtn">Close</a> --}}
+                                
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr class="text-center">
+                        <th colspan="2">Total amount</th>
+                        <th>{{ $loans != null? $loans->sum('amount') : 0 }}</th>
+                        <th colspan="5"></th>
+                        <th>total paid</th>
+                        <th>{{ $loans != null? $loans->sum('paid_amount') : 0 }}</th>
+                        <th>{{ $total_due_sum }}</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
 
-
-
-    <!-- Button trigger modal -->
-
+ 
   
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Details</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" onclick="window.print()" class="btn btn-primary print">Print</button>
-        </div>
-      </div>
-    </div>
-  </div>
 @endsection
+ @section('pagejs')
+
+
+ @endsection

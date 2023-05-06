@@ -17,6 +17,7 @@ class Loan extends Model
         'total_profit',
         'paid_amount',
         'date_from',
+        'date_to',
         'timeframe',
         'status', // 1=>active, 2=>done
     ];

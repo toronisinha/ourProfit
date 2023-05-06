@@ -21,6 +21,7 @@
                         <th>Name</th>
                         <th>Total Amount</th>
                         <th>Payment Date</th>
+                        <th>Comments</th>
                         <th>Status</th>                      
                         <th>Action</th>
                     </tr>
@@ -33,11 +34,10 @@
                             <td>{{ $payment->customer->name }}</td>
                             <td>{{ $payment->payment_amount }}</td>
                             <td>{{ date('d-M-y', strtotime($payment->payment_date)) }}</td>
+                            <td>{{ $payment->comments }}</td>
                             <td>
                                 @if ($payment->status == 1)
                                     <span class="badge bg-success">Paid</span>
-                                @elseif($payment->profit == 0 && $payment->total != 0)
-                                    <span class="badge bg-info">profit paid</span>
                                 @else  
                                    <span class="badge bg-warning">Unpaid</span> 
                                 @endif    
@@ -50,6 +50,12 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr class="text-center">
+                        <th colspan="2">Total amount</th>
+                        <th> {{ $paymentList != null? $paymentList->sum('payment_amount') : 0 }} </th>  
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

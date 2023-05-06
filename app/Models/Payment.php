@@ -12,7 +12,9 @@ class Payment extends Model
         'customer_id',
         'loan_id',
         'payment_date',
-        'payment_amount'
+        'payment_amount',
+        'status',
+        'comments'
     ];
 
     public function Customer()

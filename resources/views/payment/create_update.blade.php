@@ -64,6 +64,11 @@
                     <label class="form-label">Payment Date:</label>
                     <input class="form-control"  value="{{ !empty($item) ? \Carbon\Carbon::parse($item->payment_date)->format('Y-m-y') : old('payment_date') }}" type="date" name="payment_date">
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Payment Comments:</label>
+                    <input class="form-control"  value="{{ !empty($item) ? ($item->comments): old('comments') }}" type="text" name="comments">
+                </div>
             
 
                 @if ( !empty($item) )

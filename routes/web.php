@@ -36,6 +36,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resources(['loan'=>LoanController::class]);
     Route::get('loan/{loan}/delete', [LoanController::class, 'destroy'])->name('loan.destroy');
+    // Route::get('loan/{loan}/close', [LoanController::class, 'close'])->name('loan.close');
+     Route::post('loan/{loan}/closed', [LoanController::class, 'closeLoan'])->name('loanClose');
 
     Route::resources(['payment'=>PaymentController::class]);
     Route::get('payment/{payment}/delete', [PaymentController::class, 'destroy'])->name('payment.destroy');

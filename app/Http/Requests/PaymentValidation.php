@@ -26,6 +26,7 @@ class PaymentValidation extends FormRequest
             'loan_id' => 'required',
             'payment_amount' => 'required',
             'payment_date' => 'required',
+            'comments' => ''
         ];
     }
 

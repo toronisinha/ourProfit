@@ -8,9 +8,14 @@ use App\Models\Loan;
 
 class LoanController extends Controller
 {
-    public function index(){
-        
-        $data['loans'] = Loan::with('customer')->get();
+    public function index(Request $request){
+        $query = Loan::with('customer');
+
+        if( isset($request->amount) && ($request->amount != null )){
+            $query->where('amount', '<=', $request->amount);
+        }
+
+        $data['loans'] =$query->get();
         return view('loans.loanList', $data);
     }
 
@@ -47,11 +52,11 @@ class LoanController extends Controller
     }
 
     public function update(Loan $loan, LoanValidation $request){
-
+ 
         $validatedData = $request->validated();
         $validatedData['day_profit'] = ($validatedData['amount'] * $validatedData['percentage']) / 3000;
         $validatedData['total_profit'] = $validatedData['day_profit'] * $validatedData['timeframe'];
-
+        // dd($validatedData);
         $loan->update($validatedData);
 		return redirect()->route('loan.index')->with('success', 'loan has been updated successfully');
         
@@ -63,4 +68,6 @@ class LoanController extends Controller
         else
             return redirect()->route('loan.index')->with('error', 'Something wentddd wrong!');
     }
+
+ 
 }

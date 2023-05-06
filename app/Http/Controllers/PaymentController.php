@@ -28,6 +28,7 @@ class PaymentController extends Controller
       if ( $request->customer_id ) {
           $data['selectedCustomerId'] = $request->customer_id;
           $data['loans'] = Loan::where('customer_id', $request->customer_id)->get();
+        //  dd($data);
       }
    
       return view('payment.create_update', $data);
@@ -45,6 +46,10 @@ class PaymentController extends Controller
 
          $loan = Loan::find($request->loan_id);
          $loan->paid_amount = $loan->paid_amount + $request->payment_amount;
+         $loanAndProfit = $loan->amount + $loan->total_profit;
+         if($loanAndProfit == $loan->paid_amount){
+            $loan->status = 2;
+         }else{$loan->status = 1;}
          $loan->save();
 
          DB::commit();
@@ -85,7 +90,13 @@ class PaymentController extends Controller
            // plus to selected loan id
            $loan = Loan::find($request->loan_id);
            $loan->paid_amount = $loan->paid_amount + $request->payment_amount;
+
+           $loanAndProfit = $loan->amount + $loan->total_profit;
+           if($loanAndProfit == $loan->paid_amount){
+                $loan->status = 2;
+            }else{$loan->status = 1;}
            $loan->save();
+
 
            // update payment table
            $payment->update($validationData);

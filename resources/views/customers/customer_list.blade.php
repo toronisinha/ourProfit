@@ -5,6 +5,10 @@
 
         <div class="card-header d-flex justify-content-between">
             <h3 class="position-relative">Customer List</h3>
+            <form action={{ route('customer.index') }} method="get">
+                <input type="text" name="name" placeholder="Search customer name">
+                <input type="submit"  value="Search">
+            </form>
             <button class="btn btn-info "><a class="text-light text-decoration-none" href={{ route('customer.create') }}>Add Customer</a></button>
         </div>
         <div class="card-body table-responsive">

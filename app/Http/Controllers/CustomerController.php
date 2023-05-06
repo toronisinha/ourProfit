@@ -9,10 +9,16 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
+
+        if( isset($request->name) && ($request->name != null )){
+            $allCustomer = Customer::where('name', $request->name)->get();
+            return view('customers.customer_list', compact('allCustomer'));
+        }
         $allCustomer = Customer::all();
         return view('customers.customer_list', compact('allCustomer'));
     }
+
     public function create(){
         $data['title'] = "Add new Customer";
         return view('customers.create_update', $data);
